@@ -1,0 +1,24 @@
+{
+    "name": "robvanaarle/ultimo-acl",
+    "description": "Simple access control list",
+    "type": "library",
+    "keywords": [
+        "acl",
+        "security",
+        "access",
+        "role",
+        "privilege"
+    ],
+    "license": "BSD-3-Clause",
+    "authors": [
+	  		{
+	    	  "name": "Rob van Aarle"
+	  		}
+	  ],
+    "autoload": {
+    		"psr-4": {
+       			"ultimo\\": "src/ultimo/"
+    		}
+  }
+}
+
