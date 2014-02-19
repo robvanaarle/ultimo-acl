@@ -8,7 +8,7 @@ The ACL allows (or denies) priviliges to roles. Roles can have one or more paren
 
 ## Usage
 
-	$acl = new \ultimo\security\ACL();
+	$acl = new \ultimo\security\Acl();
 	
 	// add roles
 	$acl->addRole('guest');
