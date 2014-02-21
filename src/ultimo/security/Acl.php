@@ -60,6 +60,11 @@ class Acl {
     } else {
       // the role already exists, add the new parents to it
       foreach($parents as $parent) {
+        
+        if (!array_key_exists($parent, $this->parents)) {
+          throw new AclException("Role '$parent' does not exist.", AclException::ROLE_NOT_FOUND);
+        }
+        
         if ($parent != $role && !in_array($parent, $this->parents[$role])) {
           $this->parents[$role][] = $parent;
         }
@@ -97,6 +102,7 @@ class Acl {
       
       // if all privileges are denied, remove that entry
       if (!empty($privileges) && array_key_exists(self::ALL_PRIVILEGES, $this->denied[$role])) {
+        // This is not necessary, as unexisting priviliges are denied by default
         unset($this->denied[$role][self::ALL_PRIVILEGES]);
       }
       
@@ -125,7 +131,7 @@ class Acl {
   public function deny($role, $privileges = null, $callback=null) {
     // check if the role exists
     if (!array_key_exists($role, $this->parents)) {
-      throw new AclException("Role '$role' does not exist.", AclException::ROLE_NOT_FOUNDROLE_NOT_FOUND);
+      throw new AclException("Role '$role' does not exist.", AclException::ROLE_NOT_FOUND);
     }
     
     if ($privileges === null) {
@@ -214,10 +220,10 @@ class Acl {
       return $this->executeCallback($this->allowed[$role][self::ALL_PRIVILEGES], $role, self::ALL_PRIVILEGES, $callbackParam);
     } elseif (array_key_exists($privilege, $this->denied[$role])) {
       // the privilege is specified in the denied list
-      return $this->executeCallback($this->denied[$role][$privilege], $role, $privilege, $callbackParam);
+      return !$this->executeCallback($this->denied[$role][$privilege], $role, $privilege, $callbackParam);
     } elseif (array_key_exists(self::ALL_PRIVILEGES, $this->denied[$role])) {
-      // all privileges are allowed
-      return $this->executeCallback($this->denied[$role][self::ALL_PRIVILEGES], $role, self::ALL_PRIVILEGES, $callbackParam);
+      // all privileges are denied
+      return !$this->executeCallback($this->denied[$role][self::ALL_PRIVILEGES], $role, self::ALL_PRIVILEGES, $callbackParam);
     } else {
       // check each parent if the privilige is allowed
       foreach ($this->parents[$role] as $parent) {
