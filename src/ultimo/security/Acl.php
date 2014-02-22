@@ -276,11 +276,15 @@ class Acl {
     }
     
     foreach ($acl->allowed as $role => $privileges) {
-      $this->allow($role, $privileges);
+      foreach ($privileges as $privilege => $callback) {
+        $this->allow($role, $privilege, $callback);
+      }
     }
     
     foreach ($acl->denied as $role => $privileges) {
-      $this->deny($role, $privileges);
+      foreach ($privileges as $privilege => $callback) {
+        $this->deny($role, $privilege, $callback);
+      }
     }
     return $this;
   }

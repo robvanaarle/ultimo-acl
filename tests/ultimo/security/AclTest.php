@@ -6,6 +6,8 @@ class AclTest extends \PHPUnit_Framework_TestCase
 {
   protected $acl;
   
+  protected $acl2;
+  
   public function setup() {
     $this->acl = new Acl();
     
@@ -22,6 +24,13 @@ class AclTest extends \PHPUnit_Framework_TestCase
     $this->acl->allow('admin');
     
     $this->acl->deny('member', 'profile.create');
+    
+    
+    $this->acl2 = new Acl();
+    $this->acl2->addRole('guest');
+    $this->acl2->addRole('webmaster', 'guest');
+    $this->acl2->allow('guest', 'faq.read');
+    $this->acl2->deny('guest', 'news.read');
   }
   
   /**
@@ -197,11 +206,20 @@ class AclTest extends \PHPUnit_Framework_TestCase
   }
   
   /**
-   * Test *all* privileges allowed is cancelled is one privilege is denied
+   * Test *all* privileges allowed is cancelled if one privilege is denied
    */
   public function testEverythingAllowedIsCancelledIfAPrivilegeIsDenied() {
     $this->acl->allow('admin');
     $this->acl->deny('admin', 'website.delete');
+    $this->assertFalse($this->acl->isAllowed('admin', 'website.read'));
+  }
+  
+  /**
+   * Test *all* privileges denied is cancelled if one privilege is allowed
+   */
+  public function testEverythingDeniedIsCancelledIfAPrivilegeIsAllowed() {
+    $this->acl->deny('admin');
+    $this->acl->allow('admin', 'website.delete');
     $this->assertFalse($this->acl->isAllowed('admin', 'website.read'));
   }
   
@@ -250,5 +268,54 @@ class AclTest extends \PHPUnit_Framework_TestCase
    */
   public function testAllRolesArePresent() {
     $this->assertSame(array('guest', 'member', 'news_admin', 'forum_admin', 'admin'), $this->acl->getRoles());
+  }
+  
+  /**
+   * Test parent in merged acl
+   */
+  public function testWebmasterBelongsToGuestInMergedAcl() {
+    $this->acl->merge($this->acl2);
+    $this->assertTrue($this->acl->belongsTo('webmaster', 'guest'));
+  }
+  
+  /**
+   * Test direct privilege in acl
+   */
+  public function testGuestIsAllowedToREadFaqInMergedAcl() {
+    $this->acl->merge($this->acl2);
+    $this->assertTrue($this->acl->isAllowed('guest', 'faq.read'));
+  }
+  
+  /**
+   * Test first degree inherited privilege of new role in acl
+   */
+  public function testWebmasterIsAllowedToReadFaqInMergedAcl() {
+    $this->acl->merge($this->acl2);
+    $this->assertTrue($this->acl->isAllowed('webmaster', 'faq.read'));
+  }
+  
+  /**
+   * Test first degree inherited privilege of existing role in acl
+   */
+  public function testMemberIsAllowedToReadFaqInMergedAcl() {
+    $this->acl->merge($this->acl2);
+    $this->assertTrue($this->acl->isAllowed('member', 'faq.read'));
+  }
+  
+  /**
+   * Test deny in merged acl
+   */
+  public function testGuestIsNotAllowedToReadNewsInMergedAcl() {
+    $this->acl->merge($this->acl2);
+    $this->assertFalse($this->acl->isAllowed('guest', 'news.read'));
+  }
+  
+  /**
+   * Test all roles are present in merged acl
+   */
+  public function testAllRolesArePresentInMergedAcl() {
+    $this->acl->merge($this->acl2);
+    
+    $this->assertSame(array('guest', 'member', 'news_admin', 'forum_admin', 'admin', 'webmaster'), $this->acl->getRoles());
   }
 }
