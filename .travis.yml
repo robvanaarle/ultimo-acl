@@ -1,6 +1,11 @@
 language: php
-php: 5.3
+php: 5.5
 before_script:
   - composer install
 script:
   - vendor/bin/phpunit
+after_success:
+  - vendor/bin/test-reporter
+addons:
+  code_climate:
+    repo_token: 1e007e0f99173e2dd75e9c50a0177e801fd05aa6a6629d8be640493e513f9808
