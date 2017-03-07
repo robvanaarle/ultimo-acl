@@ -1,5 +1,5 @@
 # Ultimo - ACL
-[![Build Status](https://travis-ci.org/robvanaarle/ultimo-ac;.svg?branch=master)](https://travis-ci.org/robvanaarle/ultimo-acl)
+[![Build Status](https://travis-ci.org/robvanaarle/ultimo-acl.svg?branch=master)](https://travis-ci.org/robvanaarle/ultimo-acl)
 
 Simple access control list
 
