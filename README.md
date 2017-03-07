@@ -1,4 +1,6 @@
 # Ultimo - ACL
+[![Build Status](https://travis-ci.org/robvanaarle/ultimo-ac;.svg?branch=master)](https://travis-ci.org/robvanaarle/ultimo-acl)
+
 Simple access control list
 
 The ACL allows (or denies) priviliges to roles. Roles can have one or more parent roles. A child role inherits the allowed (or denied) privileges of all its parents. ACLs can be merged.
