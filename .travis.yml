@@ -4,8 +4,9 @@ before_script:
   - composer install
 script:
   - vendor/bin/phpunit
-after_success:
+after_script:
   - vendor/bin/test-reporter
 addons:
   code_climate:
-    repo_token: 1e007e0f99173e2dd75e9c50a0177e801fd05aa6a6629d8be640493e513f9808
+    repo_token:
+      secure: "EdoffNXYUPiV9xETHlVj5gWdH9TMYp2/5YSxS9FoPO7D4s/klMv4FNsragjlq5Jqjs1kIxQXain1WNTkKNzyn+7spp0KZiB8e18sp1tCyO9G24UiusVYTgN9zsMxuA1RvM11hzmToqNgaoYADfpl8OJXDS2IcYpACKVkOOZLzD7DDS6SakP+hsAY9Le4HzxxB92QPq9+HlwDODPbwG8judJ+czhsFsk5qCG5B13l2DK8xsqNlafXIWj4axBAUx9CVqhGYDeuVvZMTQp7Rm4M/TI2mhmLWyvAWahj2osk52tRbSQ7t90Ocpp1H1ZT87df8EkJQ0GyGtmzrne2MztWNPy8Jf54izD9qYZtiZAlRxuiz0rngYYaecSFfBFSGcaFSMjuqqltLusOMz8Y+xHcvf/kmYBJUcHxp14FDEA2ZL4ccWGVc8xvIKENVIJKaO+RVhKeYkqbL6XO2XhfiL1acsbYq9bxPcIx/svkey3wPZWucgcVoHh1SN3FExzBWcQ10zORrJtImxnHZHHfDhpVyMHpQ7HZAiZwdX2hy24jkq6F/DK0mp998Iz8obUdGPLfzLiGYVq6DROH/sHzR+hFaXLlI5MCnCxN0v5qUn188lYyqOLyq1O/Hm+vZmrWs2ltOZ1JeQJjr8jmPnKy1PRtparMC79KbgHeWs8jxOhN22s="
